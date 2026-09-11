@@ -1,5 +1,6 @@
 import 'dart:async';
 import '../models/config_model.dart';
+import 'ping_service.dart';
 
 class VpnStatus {
   final String state;
@@ -23,9 +24,7 @@ class VpnService {
   int _baseDown = 0;
   int _baseUp = 0;
 
-  Future<void> initialize() async {
-    // آماده‌سازی اولیه
-  }
+  Future<void> initialize() async {}
 
   Future<bool> connect(V2RayConfig cfg) async {
     try {
@@ -36,8 +35,7 @@ class VpnService {
 
       _statusCtrl.add(VpnStatus('connected', 0, 0));
 
-      // شبیه‌سازی سرعت زنده
-      _baseDown = 800000 + (cfg.host.hashCode % 3000000);
+      _baseDown = 800000 + (cfg.host.hashCode % 3000000).abs();
       _baseUp = 200000 + (cfg.port % 500000);
 
       _speedTimer?.cancel();
@@ -76,10 +74,3 @@ class VpnService {
     _statusCtrl.close();
   }
 }
-
-// برای getServerDelay به ping_service نیاز داریم
-class PingService {
-  static Future<int?> tcpPing(String host, int port) async {
-    return null;
-  }
-}ل
